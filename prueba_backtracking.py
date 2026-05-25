@@ -10,7 +10,7 @@ valor_maximo, objetos = mochila_backtracking(
     capacidad
 )
 
-print("\n========= RESULTADOS BACKTRACKING =========\n")
+print("\n RESULTADOS BACKTRACKING \n")
 
 print(f"Capacidad máxima de la mochila: {capacidad} kg\n")
 
