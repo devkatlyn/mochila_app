@@ -1,35 +1,3 @@
-"""
--------------------------------------------------------
-PROYECTO: Problema de la Mochila (Knapsack Problem)
--------------------------------------------------------
-
-Archivo:
-main.py
-
-Descripción:
-Interfaz gráfica moderna utilizando CustomTkinter
-para comparar distintos paradigmas de programación
-aplicados al Problema de la Mochila.
-
-Paradigmas:
-- Greedy
-- Programación Dinámica
-- Backtracking
-
-Características:
-- Diseño moderno tipo dashboard
-- Comparación de algoritmos
-- Tiempo de ejecución
-- Uso de memoria
-- Complejidad algorítmica
-- Resultados visuales organizados
-
-Tecnologías:
-- Python
-- CustomTkinter
-
--------------------------------------------------------
-"""
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import customtkinter as ctk
@@ -41,17 +9,16 @@ from backtracking import mochila_backtracking
 from comparador import comparar_todo
 
 
-# =====================================================
+
 # CONFIGURACIÓN GLOBAL
-# =====================================================
+
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 
-# =====================================================
 # APP
-# =====================================================
+
 
 class MochilaApp(ctk.CTk):
 
@@ -59,20 +26,20 @@ class MochilaApp(ctk.CTk):
 
         super().__init__()
 
-        # ---------------- WINDOW ----------------
+        # WINDOW 
         self.title("Analizador del Problema de la Mochila")
         self.geometry("1200x720")
         self.minsize(1100, 650)
         self.configure(fg_color="#0f172a") # Slate 900
 
-        # ---------------- GRID ----------------
+        # GRID 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
         self.grid_rowconfigure(0, weight=1)
 
-        # =================================================
+        
         # SIDEBAR
-        # =================================================
+        
 
         self.sidebar = ctk.CTkFrame(
             self,
@@ -83,7 +50,7 @@ class MochilaApp(ctk.CTk):
 
         self.sidebar.grid(row=0, column=0, sticky="nswe", padx=(15, 0), pady=15)
 
-        # ---------------- TITLE ----------------
+        # TITLE 
 
         self.title_label = ctk.CTkLabel(
             self.sidebar,
@@ -103,9 +70,9 @@ class MochilaApp(ctk.CTk):
 
         self.subtitle.pack(pady=(0, 20))
 
-        # =================================================
+        
         # INPUTS
-        # =================================================
+       
 
         self.capacidad_label = ctk.CTkLabel(
             self.sidebar,
@@ -174,9 +141,9 @@ class MochilaApp(ctk.CTk):
 
         self.valores_entry.pack(fill="x", padx=20, pady=(5, 20))
 
-        # =================================================
+        
         # ALGORITMOS
-        # =================================================
+        
 
         self.algoritmo_label = ctk.CTkLabel(
             self.sidebar,
@@ -241,9 +208,9 @@ class MochilaApp(ctk.CTk):
 
         self.compare_radio.pack(anchor="w", padx=20, pady=5)
 
-        # =================================================
+        
         # BUTTON
-        # =================================================
+        
 
         self.run_button = ctk.CTkButton(
             self.sidebar,
@@ -259,9 +226,9 @@ class MochilaApp(ctk.CTk):
 
         self.run_button.pack(fill="x", padx=20, pady=(20, 10))
 
-        # =================================================
+        
         # MAIN PANEL
-        # =================================================
+        
 
         self.main_panel = ctk.CTkFrame(
             self,
@@ -285,9 +252,8 @@ class MochilaApp(ctk.CTk):
 
         self.result_title.grid(row=0, column=0, pady=(20, 10))
 
-        # =================================================
         # TEXTBOX
-        # =================================================
+        
 
         self.output = ctk.CTkTextbox(
             self.main_panel,
@@ -315,18 +281,18 @@ class MochilaApp(ctk.CTk):
         self.output.tag_config("warning", foreground="#fbbf24")
         self.output.tag_config("muted", foreground="#64748b")
 
-        # =================================================
+        
         # CONTENEDOR DE GRÁFICA
-        # =================================================
+      
 
         self.graph_frame = ctk.CTkFrame(
             self.main_panel,
             fg_color="transparent"
         )
 
-    # =====================================================
+   
     # EJECUTAR
-    # =====================================================
+  
 
     def ejecutar(self):
 
@@ -358,9 +324,9 @@ class MochilaApp(ctk.CTk):
 
             opcion = self.algoritmo.get()
 
-            # =================================================
+            
             # GREEDY
-            # =================================================
+            
 
             if opcion == "greedy":
 
@@ -379,9 +345,9 @@ class MochilaApp(ctk.CTk):
                     capacidad
                 )
 
-            # =================================================
+           
             # DINÁMICA
-            # =================================================
+           
 
             elif opcion == "dinamica":
 
@@ -400,9 +366,9 @@ class MochilaApp(ctk.CTk):
                     capacidad
                 )
 
-            # =================================================
+         
             # BACKTRACKING
-            # =================================================
+          
 
             elif opcion == "backtracking":
 
@@ -421,9 +387,9 @@ class MochilaApp(ctk.CTk):
                     capacidad
                 )
 
-            # =================================================
+           
             # COMPARAR TODOS
-            # =================================================
+        
 
             elif opcion == "comparar":
 
@@ -513,9 +479,9 @@ class MochilaApp(ctk.CTk):
                 f"\n❌ ERROR:\n{str(e)}"
             )
 
-    # =====================================================
+  
     # MOSTRAR RESULTADO
-    # =====================================================
+    
 
     def mostrar_resultado(
         self,
@@ -635,9 +601,9 @@ class MochilaApp(ctk.CTk):
         self.graph_frame.grid(row=2, column=0, sticky="nswe", padx=20, pady=(0, 20))
         self.main_panel.grid_rowconfigure(2, weight=1)
 
-# =====================================================
+
 # RUN APP
-# =====================================================
+
 
 if __name__ == "__main__":
 
