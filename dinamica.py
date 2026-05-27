@@ -1,28 +1,54 @@
 """
 PROYECTO: Problema de la Mochila (Knapsack Problem)
 Archivo: dinamica.py
-Descripción: Implementación del algoritmo de Programación Dinámica para resolver
-            el Problema de la Mochila. Busca maximizar el valor sin superar
-            la capacidad usando tabla de subproblemas.
+Descripción: Implementación de Programación Dinámica con visualización de estados.
 Complejidad temporal: O(n * W)
 """
 
-def mochila_dinamica(pesos, valores, capacidad):
+def mochila_dinamica(pesos, valores, capacidad, callback=None):
     n = len(valores)
-    dp = [[0 for x in range(capacidad + 1)] for x in range(n + 1)]  # Tabla DP
 
-    for i in range(1, n + 1):  # Llenar tabla iterativamente
+    if callback:
+        callback({'tipo': 'inicio', 'algoritmo': 'Dinámica', 'n': n, 'W': capacidad, 'pesos': pesos, 'valores': valores})
+
+    dp = [[0 for x in range(capacidad + 1)] for x in range(n + 1)]
+
+    for i in range(1, n + 1):
+        if callback:
+            callback({'tipo': 'inicia_fila', 'fila': i, 'objeto': i-1, 'peso': pesos[i-1], 'valor': valores[i-1]})
         for w in range(capacidad + 1):
-            if pesos[i - 1] <= w:  # Objeto cabe: elegir mejor opción
-                dp[i][w] = max(valores[i - 1] + dp[i - 1][w - pesos[i - 1]], dp[i - 1][w])
-            else:  # Objeto no cabe
+            if pesos[i - 1] <= w:
+                anterior = dp[i - 1][w]
+                con_objeto = valores[i - 1] + dp[i - 1][w - pesos[i - 1]]
+                dp[i][w] = max(con_objeto, anterior)
+                if callback:
+                    callback({
+                        'tipo': 'celda',
+                        'fila': i, 'col': w,
+                        'valor': dp[i][w],
+                        'anterior': anterior,
+                        'con_objeto': con_objeto,
+                        'actualizada': dp[i][w] != anterior
+                    })
+            else:
                 dp[i][w] = dp[i - 1][w]
+                if callback:
+                    callback({'tipo': 'celda', 'fila': i, 'col': w, 'valor': dp[i][w], 'anterior': dp[i-1][w], 'actualizada': False})
 
-    objetos = []  # Reconstruir objetos seleccionados
+    objetos = []
     w = capacidad
+
+    if callback:
+        callback({'tipo': 'inicia_reconstruccion'})
+
     for i in range(n, 0, -1):
-        if dp[i][w] != dp[i - 1][w]:  # Este objeto fue seleccionado
+        if dp[i][w] != dp[i - 1][w]:
             objetos.append(i - 1)
+            if callback:
+                callback({'tipo': 'reconstruye', 'idx': i-1, 'peso': pesos[i-1], 'valor': valores[i-1], 'w_restante': w})
             w -= pesos[i - 1]
 
-    return dp[n][capacidad], objetos[::-1]  # Invertir para orden original
+    if callback:
+        callback({'tipo': 'fin', 'valor_total': dp[n][capacidad], 'seleccionados': objetos[::-1]})
+
+    return dp[n][capacidad], objetos[::-1]
