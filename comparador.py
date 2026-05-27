@@ -1,24 +1,12 @@
 """
--------------------------------------------------------
 PROYECTO: Problema de la Mochila (Knapsack Problem)
--------------------------------------------------------
-
-Archivo:
-comparador.py
-
-Descripción:
-Este archivo contiene las funciones encargadas de
-medir y comparar el rendimiento de los algoritmos
-implementados.
-
-Se analizan aspectos como:
-- Tiempo de ejecución
-- Uso de memoria
-- Complejidad algorítmica
+Archivo: comparador.py
+Descripción: Funciones para medir y comparar el rendimiento de los algoritmos.
+            Analiza tiempo de ejecución, uso de memoria y complejidad.
 """
+
 import time
 import tracemalloc
-
 from greedy import mochila_greedy
 from dinamica import mochila_dinamica
 from backtracking import mochila_backtracking
@@ -29,13 +17,10 @@ def formatear_objetos(objetos):
 
 
 def medir(nombre, func, pesos, valores, capacidad, complejidad):
-
-    tracemalloc.start()
-
+    tracemalloc.start()  # Iniciar medición de memoria
     inicio = time.time()
     valor, objetos = func(pesos, valores, capacidad)
     fin = time.time()
-
     memoria_actual, memoria_pico = tracemalloc.get_traced_memory()
     tracemalloc.stop()
 
@@ -44,59 +29,15 @@ def medir(nombre, func, pesos, valores, capacidad, complejidad):
         "valor": valor,
         "objetos": formatear_objetos(objetos),
         "tiempo": fin - inicio,
-        "memoria": memoria_pico / 1024,
+        "memoria": memoria_pico / 1024,  # Convertir a KB
         "complejidad": complejidad
     }
 
 
 def comparar_todo(pesos, valores, capacidad):
-
-    resultados = []
-
-    resultados.append(
-        medir(
-            "GREEDY",
-            mochila_greedy,
-            pesos,
-            valores,
-            capacidad,
-            "O(n log n)"
-        )
-    )
-
-    resultados.append(
-        medir(
-            "PROGRAMACIÓN DINÁMICA",
-            mochila_dinamica,
-            pesos,
-            valores,
-            capacidad,
-            "O(n·W)"
-        )
-    )
-
-    resultados.append(
-        medir(
-            "BACKTRACKING",
-            mochila_backtracking,
-            pesos,
-            valores,
-            capacidad,
-            "O(2^n)"
-        )
-    )
-
+    resultados = [
+        medir("GREEDY", mochila_greedy, pesos, valores, capacidad, "O(n log n)"),
+        medir("PROGRAMACIÓN DINÁMICA", mochila_dinamica, pesos, valores, capacidad, "O(n·W)"),
+        medir("BACKTRACKING", mochila_backtracking, pesos, valores, capacidad, "O(2^n)")
+    ]
     return resultados
-def obtener_metricas(resultados):
-
-    nombres = []
-    tiempos = []
-    memorias = []
-
-    for r in resultados:
-
-        nombres.append(r["nombre"])
-        tiempos.append(r["tiempo"])
-        memorias.append(r["memoria"])
-
-    return nombres, tiempos, memorias
