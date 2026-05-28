@@ -1,10 +1,3 @@
-"""
-PROYECTO: Problema de la Mochila (Knapsack Problem)
-Archivo: comparador.py
-Descripción: Funciones para medir y comparar el rendimiento de los algoritmos.
-            Analiza tiempo de ejecución, uso de memoria y complejidad.
-"""
-
 import timeit
 import tracemalloc
 from src.greedy import mochila_greedy

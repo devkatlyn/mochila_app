@@ -1,10 +1,3 @@
-"""
-PROYECTO: Problema de la Mochila (Knapsack Problem)
-Archivo: dinamica.py
-Descripción: Implementación de Programación Dinámica con visualización de estados.
-Complejidad temporal: O(n * W)
-"""
-
 def mochila_dinamica(pesos, valores, capacidad, callback=None):
     n = len(valores)
 

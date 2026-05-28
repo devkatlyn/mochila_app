@@ -1,10 +1,3 @@
-"""
-PROYECTO: Problema de la Mochila (Knapsack Problem)
-Archivo: greedy.py
-Descripción: Implementación del algoritmo Voraz (Greedy) con visualización de estados.
-Complejidad temporal: O(n log n)
-"""
-
 def mochila_greedy(pesos, valores, capacidad, callback=None):
     n = len(valores)
     objetos = []

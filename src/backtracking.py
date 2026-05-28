@@ -1,10 +1,3 @@
-"""
-PROYECTO: Problema de la Mochila (Knapsack Problem)
-Archivo: backtracking.py
-Descripción: Implementación de Backtracking con visualización de estados.
-Complejidad temporal: O(2^n)
-"""
-
 def mochila_backtracking(pesos, valores, capacidad, callback=None, max_estados=500):
     n = len(pesos)
     mejor_valor, mejor_comb = 0, []
