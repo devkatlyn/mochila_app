@@ -420,7 +420,7 @@ class Visualizador:
 class MochilaApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Analizador del Problema de la Mochila")
+        self.title("Simulación de Algoritmos aplicado al Knapsack Problem")
         self.geometry("1200x720")
         self.minsize(1100, 650)
         self.configure(fg_color=COLORES['bg'])
@@ -436,7 +436,7 @@ class MochilaApp(ctk.CTk):
         self.sidebar = ctk.CTkFrame(self, width=320, corner_radius=15, fg_color=COLORES['panel'])
         self.sidebar.grid(row=0, column=0, sticky="nswe", padx=(15, 0), pady=15)
 
-        self.title_label = ctk.CTkLabel(self.sidebar, text="ANALIZADOR DEL PROBLEMA\nDE LA MOCHILA",
+        self.title_label = ctk.CTkLabel(self.sidebar, text="SIMULACIÓN DE ALGORITMOS\nAPLICADO AL KNAPSACK PROBLEM",
                                          font=("Segoe UI", 18, "bold"), text_color=COLORES['azul'])
         self.title_label.pack(pady=(30, 10))
 

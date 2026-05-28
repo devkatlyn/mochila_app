@@ -1,4 +1,4 @@
-# Analizador del Problema de la Mochila
+# Simulación de Algoritmos aplicado al Knapsack Problem
 
 Aplicación de escritorio en **Python** con **CustomTkinter** para comparar tres algoritmos clásicos del Knapsack Problem.
 
