@@ -5,11 +5,18 @@ Descripción: Funciones para medir y comparar el rendimiento de los algoritmos.
             Analiza tiempo de ejecución, uso de memoria y complejidad.
 """
 
-import time
+import timeit
 import tracemalloc
 from src.greedy import mochila_greedy
 from src.dinamica import mochila_dinamica
 from src.backtracking import mochila_backtracking
+
+
+REPETICIONES_POR_ALGORITMO = {
+    "GREEDY": 10000,
+    "PROGRAMACIÓN DINÁMICA": 1000,
+    "BACKTRACKING": 100,
+}
 
 
 def formatear_objetos(objetos):
@@ -17,10 +24,16 @@ def formatear_objetos(objetos):
 
 
 def medir(nombre, func, pesos, valores, capacidad, complejidad):
+    repeticiones = REPETICIONES_POR_ALGORITMO.get(nombre, 1000)
+
+    # 1. Medir tiempo con timeit (7 repeticiones, toma la mejor)
+    timer = timeit.Timer(lambda: func(pesos, valores, capacidad))
+    tiempos = timer.repeat(repeat=7, number=repeticiones)
+    mejor_tiempo = min(tiempos) / repeticiones
+
+    # 2. Medir memoria por separado (sin interferir con el tiempo)
     tracemalloc.start()
-    inicio = time.perf_counter()
     valor, objetos = func(pesos, valores, capacidad)
-    fin = time.perf_counter()
     _, memoria_pico = tracemalloc.get_traced_memory()
     tracemalloc.stop()
 
@@ -28,7 +41,7 @@ def medir(nombre, func, pesos, valores, capacidad, complejidad):
         "nombre": nombre,
         "valor": valor,
         "objetos": formatear_objetos(objetos),
-        "tiempo": fin - inicio,
+        "tiempo": mejor_tiempo,
         "memoria": memoria_pico / 1024,
         "complejidad": complejidad
     }
