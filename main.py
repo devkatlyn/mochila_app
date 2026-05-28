@@ -4,10 +4,10 @@ import customtkinter as ctk
 from tkinter import Canvas, END
 import math
 
-from greedy import mochila_greedy
-from dinamica import mochila_dinamica
-from backtracking import mochila_backtracking
-from comparador import comparar_todo
+from src.greedy import mochila_greedy
+from src.dinamica import mochila_dinamica
+from src.backtracking import mochila_backtracking
+from src.comparador import comparar_todo
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")

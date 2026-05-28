@@ -31,12 +31,18 @@ python main.py
 ## Estructura
 
 ```
-├── main.py           # GUI (CustomTkinter + Matplotlib)
-├── greedy.py         # Algoritmo voraz
-├── dinamica.py       # Programación dinámica
-├── backtracking.py   # Backtracking exhaustivo
-├── comparador.py      # Métricas de rendimiento
-└── requirements.txt  # Dependencias
+├── main.py              # GUI (CustomTkinter + Matplotlib)
+├── requirements.txt     # Dependencias
+├── src/                 # Algoritmos y utilidades
+│   ├── greedy.py        # Algoritmo voraz
+│   ├── dinamica.py      # Programación dinámica
+│   ├── backtracking.py  # Backtracking exhaustivo
+│   └── comparador.py    # Métricas de rendimiento
+└── tests/               # Pruebas independientes
+    ├── prueba_greedy.py
+    ├── prueba_dinamica.py
+    ├── prueba_backtracking.py
+    └── prueba_comparador.py
 ```
 
 ## Métricas
