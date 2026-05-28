@@ -89,6 +89,17 @@ def mochila_backtracking(pesos, valores, capacidad, callback=None, max_estados=5
         callback({'tipo': 'inicio', 'algoritmo': 'Backtracking', 'n_objetos': n, 'capacidad': capacidad})
         estados_generados += 1
 
+    if capacidad <= 0:
+        if callback:
+            callback({
+                'tipo': 'fin',
+                'valor_total': 0,
+                'seleccionados': [],
+                'combinaciones_exploradas': 0,
+                'truncado': False
+            })
+        return 0, []
+
     explorar(0, 0, 0, [])
 
     if callback:

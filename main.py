@@ -132,9 +132,6 @@ class Visualizador:
             self._marcar_mejor_solucion(estado)
         elif tipo == 'inicia_seleccion':
             self._actualizar_info("Iniciando seleccion de objetos...")
-        elif tipo == 'objeto_sin_peso':
-            self._marcar_seleccionado(estado['idx'])
-            self._actualizar_info(f"Objeto {estado['idx']+1} SELECCIONADO (peso=0, valor={estado['valor']})")
 
     def _dibujar_inicio(self, estado):
         w = self.canvas.winfo_width()
@@ -566,14 +563,14 @@ class MochilaApp(ctk.CTk):
             pesos, valores = [], []
             for p in pesos_raw:
                 val = int(p.strip())
-                if val < 0:
-                    raise ValueError("Los pesos no pueden ser negativos.")
+                if val <= 0:
+                    raise ValueError("Los pesos deben ser positivos (mayores a 0).")
                 pesos.append(val)
 
             for v in valores_raw:
                 val = int(v.strip())
-                if val < 0:
-                    raise ValueError("Los valores no pueden ser negativos.")
+                if val <= 0:
+                    raise ValueError("Los valores deben ser positivos (mayores a 0).")
                 valores.append(val)
 
             opcion = self.algoritmo.get()

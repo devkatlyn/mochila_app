@@ -12,14 +12,14 @@ def mochila_greedy(pesos, valores, capacidad, callback=None):
     if callback:
         callback({'tipo': 'inicio', 'algoritmo': 'Greedy', 'capacidad': capacidad, 'pesos': pesos, 'valores': valores})
 
+    if capacidad <= 0:
+        if callback:
+            callback({'tipo': 'fin', 'valor_total': 0, 'seleccionados': []})
+        return 0, []
+
     for i in range(n):
         if callback:
             callback({'tipo': 'calcula_ratio', 'idx': i, 'peso': pesos[i], 'valor': valores[i]})
-        if pesos[i] == 0:
-            if valores[i] > 0:
-                if callback:
-                    callback({'tipo': 'objeto_sin_peso', 'idx': i, 'valor': valores[i]})
-            continue
         relacion = valores[i] / pesos[i]
         objetos.append((i, pesos[i], valores[i], relacion))
         if callback:

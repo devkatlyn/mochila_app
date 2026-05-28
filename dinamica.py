@@ -11,6 +11,11 @@ def mochila_dinamica(pesos, valores, capacidad, callback=None):
     if callback:
         callback({'tipo': 'inicio', 'algoritmo': 'Dinámica', 'n': n, 'W': capacidad, 'pesos': pesos, 'valores': valores})
 
+    if capacidad <= 0:
+        if callback:
+            callback({'tipo': 'fin', 'valor_total': 0, 'seleccionados': []})
+        return 0, []
+
     dp = [[0 for x in range(capacidad + 1)] for x in range(n + 1)]
 
     for i in range(1, n + 1):
