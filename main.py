@@ -3,7 +3,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import customtkinter as ctk
 from tkinter import Canvas, END
 import math
-import time
 
 from greedy import mochila_greedy
 from dinamica import mochila_dinamica
@@ -122,7 +121,7 @@ class Visualizador:
         elif tipo == 'inicia_reconstruccion':
             self._actualizar_info("Reconstruyendo solucion...")
         elif tipo == 'reconstruye':
-            self._resaltar_celda_reconstruida(estado['idx'])
+            self._resaltar_celda_reconstruida()
         elif tipo == 'nodo':
             self._dibujar_nodo_bt(estado)
         elif tipo == 'poda':
@@ -131,6 +130,11 @@ class Visualizador:
             self._dibujar_rama_bt(estado)
         elif tipo == 'nueva_mejor':
             self._marcar_mejor_solucion(estado)
+        elif tipo == 'inicia_seleccion':
+            self._actualizar_info("Iniciando seleccion de objetos...")
+        elif tipo == 'objeto_sin_peso':
+            self._marcar_seleccionado(estado['idx'])
+            self._actualizar_info(f"Objeto {estado['idx']+1} SELECCIONADO (peso=0, valor={estado['valor']})")
 
     def _dibujar_inicio(self, estado):
         w = self.canvas.winfo_width()
@@ -237,8 +241,8 @@ class Visualizador:
             return
         w = self.canvas.winfo_width()
         bar_width = (w - 130) * (peso_actual / capacidad)
-        self.canvas.coords(self.capacidad_bar, 90, self.canvas.coords(self.capacidad_bar)[1],
-                           90 + bar_width, self.canvas.coords(self.capacidad_bar)[3])
+        self.canvas.coords(self.capacidad_bar, 85, self.canvas.coords(self.capacidad_bar)[1],
+                           85 + bar_width, self.canvas.coords(self.capacidad_bar)[3])
         color = COLORES['verde'] if peso_actual <= capacidad else COLORES['rojo']
         self.canvas.itemconfig(self.capacidad_bar, fill=color)
         self.canvas.itemconfig(self.capacidad_text, text=f"{peso_actual} / {capacidad} kg")
@@ -320,7 +324,7 @@ class Visualizador:
             self.canvas.itemconfig(rect, fill=color, outline=COLORES['azul'], width=2)
             self.canvas.itemconfig(text, text=str(valor))
 
-    def _resaltar_celda_reconstruida(self, idx):
+    def _resaltar_celda_reconstruida(self):
         for (fila, col), (rect, text) in self.dp_celdas.items():
             current_fill = self.canvas.itemcget(rect, "fill")
             if current_fill == COLORES['amarillo']:
@@ -532,9 +536,12 @@ class MochilaApp(ctk.CTk):
         self.output.grid(row=2, column=0, sticky="nswe", padx=15, pady=(0, 15))
 
         self.graph_frame = ctk.CTkFrame(self.main_panel, fg_color="transparent")
+        self._ultimo_estado_truncado = False
 
     def _callback(self, estado):
         self.visualizador.agregar_estado(estado)
+        if estado.get('tipo') == 'fin' and estado.get('truncado'):
+            self._ultimo_estado_truncado = True
 
     def ejecutar(self):
         self.canvas.delete("all")
@@ -580,9 +587,10 @@ class MochilaApp(ctk.CTk):
                 self.visualizador.iniciar_animacion()
                 self._mostrar_resultado_texto("PROGRAMACION DINAMICA", valor, objetos, pesos, valores, capacidad)
             elif opcion == "backtracking":
+                self._ultimo_estado_truncado = False
                 valor, objetos = mochila_backtracking(pesos, valores, capacidad, callback=self._callback)
                 self.visualizador.iniciar_animacion()
-                self._mostrar_resultado_texto("BACKTRACKING", valor, objetos, pesos, valores, capacidad)
+                self._mostrar_resultado_texto("BACKTRACKING", valor, objetos, pesos, valores, capacidad, self._ultimo_estado_truncado)
             elif opcion == "comparar":
                 resultados = comparar_todo(pesos, valores, capacidad)
                 self._mostrar_comparacion(resultados)
@@ -591,13 +599,16 @@ class MochilaApp(ctk.CTk):
         except Exception as e:
             self.output.insert(END, f"\nERROR: {str(e)}")
 
-    def _mostrar_resultado_texto(self, titulo, valor, objetos, pesos, valores, capacidad):
+    def _mostrar_resultado_texto(self, titulo, valor, objetos, pesos, valores, capacidad, truncado=False):
         self.output.insert(END, f"\n{titulo}\n", "header")
         self.output.insert(END, f"Valor maximo: {valor}\n", "success")
         self.output.insert(END, f"Objetos seleccionados: ", "negrita")
         self.output.insert(END, f"{[f'Obj{i+1}' for i in objetos]}\n", "accent")
         peso_total = sum(pesos[i] for i in objetos)
         self.output.insert(END, f"Peso total: {peso_total}/{capacidad} kg\n", "success")
+        if truncado:
+            self.output.insert(END, "\nAVISO: La visualizacion fue truncada (limite de 500 estados).\n", "warning")
+            self.output.insert(END, "El resultado es correcto, pero no se muestran todos los nodos explorados.\n", "muted")
 
     def _mostrar_comparacion(self, resultados):
         self.output.insert(END, "\nCOMPARACION DE PARADIGMAS\n\n", "header")
@@ -611,7 +622,7 @@ class MochilaApp(ctk.CTk):
         for widget in self.graph_frame.winfo_children():
             widget.destroy()
 
-        nombres = [r["nombre"] if r["nombre"] != "PROGRAMACION DINAMICA" else "DINAMICA" for r in resultados]
+        nombres = [r["nombre"] if r["nombre"] != "PROGRAMACIÓN DINÁMICA" else "DINAMICA" for r in resultados]
         tiempos = [r["tiempo"] for r in resultados]
         memorias = [r["memoria"] for r in resultados]
 

@@ -17,11 +17,11 @@ def formatear_objetos(objetos):
 
 
 def medir(nombre, func, pesos, valores, capacidad, complejidad):
-    tracemalloc.start()  # Iniciar medición de memoria
-    inicio = time.time()
+    tracemalloc.start()
+    inicio = time.perf_counter()
     valor, objetos = func(pesos, valores, capacidad)
-    fin = time.time()
-    memoria_actual, memoria_pico = tracemalloc.get_traced_memory()
+    fin = time.perf_counter()
+    _, memoria_pico = tracemalloc.get_traced_memory()
     tracemalloc.stop()
 
     return {
@@ -29,7 +29,7 @@ def medir(nombre, func, pesos, valores, capacidad, complejidad):
         "valor": valor,
         "objetos": formatear_objetos(objetos),
         "tiempo": fin - inicio,
-        "memoria": memoria_pico / 1024,  # Convertir a KB
+        "memoria": memoria_pico / 1024,
         "complejidad": complejidad
     }
 
